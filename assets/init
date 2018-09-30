@@ -10,5 +10,5 @@ for i in `ls -A ${BUILD_DIR}`; do
 done
 
 # cleanup
-rm -rf /var/lib/apt/lists/*
-rm -rf /var/cache/apt/archives/*
+#rm -rf /var/lib/apt/lists/*
+#rm -rf /var/cache/apt/archives/*

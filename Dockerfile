@@ -1,21 +1,20 @@
-### install debian ###
-FROM debian:jessie
-MAINTAINER ulf.seltmann@metaccount.de
+### install ubuntu ###
+FROM ubuntu:18.04
+MAINTAINER guenter.hipler@unibas.ch
 EXPOSE 80 443 3306
 VOLUME ["/var/lib/mysql", "/var/run/mysqld", "/app", "/var/lib/xdebug"]
 ENTRYPOINT ["/docker/entrypoint"]
 CMD ["run"]
 
 RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim supervisor nullmailer graphviz locales ssh rsync graphicsmagick-imagemagick-compat libapache2-mod-shib2 git \
- && echo "deb http://packages.dotdeb.org jessie all" >/etc/apt/sources.list.d/dotdeb.list \
- && wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - \
- && apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y openssl ca-certificates apache2-mpm-worker \
-        php7.0-fpm php7.0-cli php-pear php7.0-curl php7.0-gd php7.0-intl php7.0-ldap php7.0-readline php7.0-mcrypt php7.0-mysqlnd php7.0-sqlite php7.0-xdebug php7.0-xsl php7.0-mbstring php7.0-dev \
-        make mysql-client mysql-server unzip \
- && rm -rf /var/lib/apt/lists/* \
- && rm -rf /var/cache/apt/archives/*
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y wget less vim  graphviz locales ssh rsync graphicsmagick-imagemagick-compat  \
+        apache2 apache2-utils openssl ca-certificates  libcurl4 apt-utils tzdata \
+#        libshibsp-plugins shibboleth-sp2-utils libshibsp7  libxmltooling7 \
+#        libapache2-mod-shib2 git \
+        make mariadb-client mariadb-server unzip \
+        libapache2-mod-php7.2 php7.2-bcmath php7.2-bz2 php7.2-cli php7.2-common php7.2-curl php7.2-dba php7.2-dev \
+        php7.2-fpm php7.2-gd php7.2-intl php7.2-json php7.2-mbstring php7.2-mysql php7.2-opcache \
+        php7.2-readline php7.2-soap php7.2-xml php7.2-zip php7.2-xdebug
 
 ENV APP_HOME=/app \
  APP_USER=dev \
@@ -36,8 +35,8 @@ ENV APP_HOME=/app \
 COPY assets/init /docker/init
 COPY assets/build /docker/build
 RUN chmod 755 /docker/init \
- && /docker/init \
- && rm -rf /docker/build
+ && /docker/init
+# && rm -rf /docker/build
 
 COPY assets/setup /docker/setup
 COPY assets/entrypoint /docker/entrypoint
